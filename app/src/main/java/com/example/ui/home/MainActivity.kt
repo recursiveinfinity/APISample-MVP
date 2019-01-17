@@ -5,42 +5,31 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.Toast
+import com.example.App
 import com.example.apidemo_mvp.BASE_URL_ISS
 import com.example.apidemo_mvp.R
 import com.example.apidemo_mvp.model.Response
 import com.example.apidemo_mvp.network.ISSService
+import com.example.di.DaggerAppComponent
 import kotlinx.android.synthetic.main.activity_iss.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), HomeContract.View {
 
     private val issAdapter = ISSAdapter()
 
+    @Inject
+    lateinit var issService: ISSService
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_iss)
 
-        val loggingInterceptor = HttpLoggingInterceptor()
-        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-
-        val okHttpClient = OkHttpClient
-            .Builder()
-            .addInterceptor(loggingInterceptor)
-            .build()
-
-
-        val retrofitBuilder = Retrofit.Builder()
-            .baseUrl(BASE_URL_ISS)
-            .addConverterFactory(GsonConverterFactory.create())
-
-        val retrofit = retrofitBuilder
-            .client(okHttpClient)
-            .build()
-
-        val issService = retrofit.create(ISSService::class.java)
+        (application as App).getComponent().inject(this)
 
         val homePresenter: HomeContract.Presenter = HomePresenter(issService, this)
 
