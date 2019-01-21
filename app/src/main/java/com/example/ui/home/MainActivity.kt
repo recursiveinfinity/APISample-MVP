@@ -11,6 +11,9 @@ import com.example.apidemo_mvp.R
 import com.example.apidemo_mvp.model.Response
 import com.example.apidemo_mvp.network.ISSService
 import com.example.di.DaggerAppComponent
+import com.example.di.OkHttpWithoutLogging
+import com.example.ui.home.di.DaggerHomeComponent
+import com.example.ui.home.di.HomeModule
 import kotlinx.android.synthetic.main.activity_iss.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -23,15 +26,23 @@ class MainActivity : AppCompatActivity(), HomeContract.View {
     private val issAdapter = ISSAdapter()
 
     @Inject
-    lateinit var issService: ISSService
+    lateinit var homePresenter: HomeContract.Presenter
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_iss)
 
-        (application as App).getComponent().inject(this)
 
-        val homePresenter: HomeContract.Presenter = HomePresenter(issService, this)
+        DaggerHomeComponent.builder()
+            .appComponent((application as App).getComponent())
+            .homeModule(HomeModule(this))
+            .build()
+            .inject(this)
+
+
+
 
         rvPasses.layoutManager = LinearLayoutManager(this)
         rvPasses.adapter = issAdapter
