@@ -8,6 +8,7 @@ interface HomeContract {
     interface View {
         fun showResults(results: List<Response>)
         fun showError(message: String)
+        fun showPictures()
     }
 
     interface Presenter {

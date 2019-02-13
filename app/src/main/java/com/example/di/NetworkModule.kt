@@ -1,6 +1,6 @@
 package com.example.di
 
-import com.example.apidemo_mvp.BASE_URL_ISS
+import com.example.apidemo_mvp.Constants.Companion.BASE_URL_ISS
 import com.example.apidemo_mvp.network.ISSService
 import dagger.Module
 import dagger.Provides

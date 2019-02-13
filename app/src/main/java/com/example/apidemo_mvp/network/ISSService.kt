@@ -11,6 +11,6 @@ import retrofit2.http.Query
 interface ISSService {
 
     @GET(ISS_ENDPOINT)
-    fun getISSPasses(@Query("lat") latitude: Float,
-                     @Query("lon") longitude: Float): Observable<ISSResponse>
+    fun getISSPasses(@Query("lat") latitude: Double,
+                     @Query("lon") longitude: Double): Observable<ISSResponse>
 }
